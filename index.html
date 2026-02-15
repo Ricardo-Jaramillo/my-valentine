@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Para ti ♥️</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --rose: #e8456b;
+    --rose-dark: #c73a5a;
+    --wine: #722f37;
+    --rose-light: #ffd6e0;
+    --cream: #fff8f5;
+    --pink-soft: #f8e8ed;
+  }
+
+  html, body {
+    font-family: 'Quicksand', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(232,69,107,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(244,143,177,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(255,214,224,0.12) 0%, transparent 50%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ========= FLOATING HEARTS ========= */
+  .hearts-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .float-heart {
+    position: absolute;
+    opacity: 0;
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
+    8% { opacity: 0.35; }
+    92% { opacity: 0.35; }
+    100% { transform: translateY(-10vh) rotate(360deg) scale(1.2); opacity: 0; }
+  }
+
+  /* ========= ENVELOPE SCENE ========= */
+  .envelope-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--cream);
+    background-image:
+      radial-gradient(ellipse at 30% 40%, rgba(232,69,107,0.05) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, rgba(244,143,177,0.06) 0%, transparent 50%);
+    cursor: pointer;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+    gap: 10px;
+    padding: 20px;
+  }
+
+  .envelope-scene.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .envelope-wrapper {
+    text-align: center;
+    max-width: 90vw;
+  }
+
+  .envelope-container {
+    perspective: 800px;
+    width: clamp(240px, 65vw, 320px);
+    height: clamp(165px, 45vw, 215px);
+    margin: 0 auto 20px;
+    position: relative;
+    animation: envelopeBreathe 3s ease-in-out infinite;
+  }
+
+  @keyframes envelopeBreathe {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.03) translateY(-4px); }
+  }
+
+  .envelope {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .envelope-body {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #fff5f5, #ffe0e6);
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 15px 50px rgba(173, 20, 87, 0.15), 0 5px 15px rgba(0,0,0,0.06);
+    overflow: hidden;
+    border: 2px solid #f3d0d8;
+  }
+
+  .envelope-body::after {
+    content: '♥️';
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: clamp(2.2rem, 8vw, 3rem);
+    animation: heartBeat 1.3s ease-in-out infinite;
+  }
+
+  @keyframes heartBeat {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    15% { transform: translate(-50%, -50%) scale(1.18); }
+    30% { transform: translate(-50%, -50%) scale(1); }
+    45% { transform: translate(-50%, -50%) scale(1.12); }
+  }
+
+  .envelope-flap {
+    position: absolute;
+    top: -2px; left: -2px; right: -2px;
+    height: 55%;
+    background: linear-gradient(165deg, #fff0f3, #ffd6e0);
+    clip-path: polygon(0 0, 50% 72%, 100% 0);
+    z-index: 2;
+    transform-origin: top center;
+    transition: transform 0.6s ease;
+    border: 2px solid #f3d0d8;
+  }
+
+  .envelope-container.opened .envelope-flap {
+    transform: rotateX(180deg);
+  }
+
+  .envelope-shadow-left {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    clip-path: polygon(0 0, 50% 58%, 0 100%);
+    background: linear-gradient(135deg, rgba(244,143,177,0.1), rgba(244,143,177,0.03));
+  }
+
+  .envelope-shadow-right {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    clip-path: polygon(100% 0, 50% 58%, 100% 100%);
+    background: linear-gradient(225deg, rgba(244,143,177,0.1), rgba(244,143,177,0.03));
+  }
+
+  .letter-peek {
+    position: absolute;
+    top: 12%; left: 12%; right: 12%;
+    height: 35%;
+    background: white;
+    border-radius: 4px;
+    z-index: 1;
+    transform: translateY(15px);
+    transition: transform 0.6s ease 0.2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    flex-direction: column;
+  }
+
+  .letter-peek::after {
+    content: '';
+    width: 50%;
+    height: 3px;
+    background: #f3d0d8;
+    border-radius: 2px;
+  }
+
+  .letter-peek::before {
+    content: '';
+    width: 35%;
+    height: 3px;
+    background: #f8e0e5;
+    border-radius: 2px;
+  }
+
+  .envelope-container.opened .letter-peek {
+    transform: translateY(-55px);
+  }
+
+  .envelope-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.3rem, 4.5vw, 1.7rem);
+    color: var(--rose);
+    margin-bottom: 6px;
+  }
+
+  .envelope-from {
+    font-size: 0.9rem;
+    color: #c4a0a8;
+    font-weight: 600;
+  }
+
+  .tap-hint {
+    font-size: 0.8rem;
+    color: #d4b0b8;
+    margin-top: 12px;
+    animation: fadeInOut 2s ease-in-out infinite;
+  }
+
+  @keyframes fadeInOut {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* ========= REVEAL SCENE (after envelope opens) ========= */
+  .reveal-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--cream);
+    background-image: radial-gradient(ellipse at 50% 50%, rgba(232,69,107,0.04) 0%, transparent 60%);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+    padding: 20px;
+    gap: 12px;
+  }
+
+  .reveal-scene.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .flores-img {
+    width: clamp(150px, 42vw, 220px);
+    height: auto;
+    filter: drop-shadow(0 8px 25px rgba(173, 20, 87, 0.15));
+    opacity: 0;
+    animation: popIn 0.8s ease-out forwards;
+  }
+
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(0.4) translateY(30px); }
+    60% { transform: scale(1.08) translateY(-5px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .reveal-continue {
+    font-size: 0.85rem;
+    color: #d4b0b8;
+    margin-top: 8px;
+    animation: fadeInOut 2s ease-in-out infinite;
+    cursor: pointer;
+  }
+
+  .reveal-msg {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    color: var(--rose);
+    text-align: center;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards 0.4s;
+  }
+
+  /* ========= QUESTION SCENE ========= */
+  .question-scene {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+
+  .question-scene.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .title {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2.2rem, 8vw, 3.8rem);
+    color: var(--rose);
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fadeInUp 0.9s ease forwards 0.2s;
+    text-shadow: 0 2px 12px rgba(232,69,107,0.1);
+    text-align: center;
+  }
+
+  .subtitle {
+    font-size: clamp(0.85rem, 2.8vw, 1.05rem);
+    color: #b88a94;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeInUp 0.9s ease forwards 0.45s;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  @keyframes fadeInUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========= BUTTONS ========= */
+  .buttons-wrapper {
+    opacity: 0;
+    animation: fadeInUp 0.9s ease forwards 0.65s;
+    text-align: center;
+  }
+
+  .buttons-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: nowrap;
+    margin-bottom: 0.5rem;
+    position: relative;
+    min-height: 60px;
+  }
+
+  .btn-si {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    padding: 0.95rem 3rem;
+    background: linear-gradient(135deg, var(--rose), #f06292);
+    color: white;
+    border: none;
+    border-radius: 60px;
+    cursor: pointer;
+    box-shadow:
+      0 6px 25px rgba(232,69,107,0.35),
+      0 2px 8px rgba(232,69,107,0.2),
+      inset 0 1px 0 rgba(255,255,255,0.25);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 5;
+    flex-shrink: 0;
+  }
+
+  .btn-si::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .btn-si:hover {
+    transform: scale(1.08);
+    box-shadow: 0 10px 35px rgba(232,69,107,0.45), 0 4px 12px rgba(232,69,107,0.3);
+  }
+
+  .btn-si:active { transform: scale(1.03); }
+
+  .btn-no {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.65rem 1.8rem;
+    background: white;
+    color: #c4a0a8;
+    border: 2px solid #e8d0d6;
+    border-radius: 60px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    white-space: nowrap;
+    z-index: 4;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: relative;
+    flex-shrink: 0;
+    transition: none;
+  }
+
+  .btn-no.escaped {
+    position: fixed;
+    transition: left 0.55s cubic-bezier(0.25, 1, 0.5, 1),
+                top 0.55s cubic-bezier(0.25, 1, 0.5, 1),
+                font-size 0.4s ease,
+                padding 0.4s ease,
+                opacity 0.4s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .btn-no.panicking {
+    font-size: 0.78rem !important;
+    padding: 0.4rem 1.1rem !important;
+  }
+
+  .attempt-msg {
+    margin-top: 1rem;
+    font-size: 0.88rem;
+    color: var(--rose);
+    font-weight: 600;
+    min-height: 1.5em;
+    transition: opacity 0.3s ease;
+  }
+
+  /* ========= CELEBRATION ========= */
+  .celebration {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--cream);
+    background-image: radial-gradient(ellipse at 50% 50%, rgba(232,69,107,0.05) 0%, transparent 60%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.8s ease;
+    padding: 1.5rem;
+    gap: 10px;
+  }
+
+  .celebration.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .corazon-img {
+    width: clamp(170px, 45vw, 260px);
+    height: auto;
+    filter: drop-shadow(0 8px 30px rgba(173, 20, 87, 0.2));
+    animation: celebBounce 2s ease-in-out infinite;
+  }
+
+  .celebration-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.8rem, 6.5vw, 3rem);
+    color: var(--rose);
+    text-align: center;
+    animation: celebPulse 2.5s ease-in-out infinite;
+    text-shadow: 0 3px 15px rgba(232,69,107,0.12);
+    line-height: 1.3;
+  }
+
+  .celebration-sub {
+    font-size: clamp(0.95rem, 3.5vw, 1.2rem);
+    color: #b88a94;
+    font-weight: 600;
+    text-align: center;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards 0.5s;
+  }
+
+  .celebration-footer {
+    margin-top: 1rem;
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.1rem, 3vw, 1.4rem);
+    color: var(--wine);
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards 1s;
+    text-align: center;
+    max-width: 380px;
+    line-height: 1.5;
+  }
+
+  @keyframes celebPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+
+  @keyframes celebBounce {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-8px) rotate(2deg); }
+  }
+
+  /* Confetti */
+  .confetti-piece {
+    position: fixed;
+    z-index: 210;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  /* Burst hearts */
+  .burst-heart {
+    position: fixed;
+    z-index: 220;
+    pointer-events: none;
+  }
+
+  /* Mobile tweaks */
+  @media (max-width: 500px) {
+    .btn-si { font-size: 1.25rem; padding: 0.85rem 2.2rem; }
+    .btn-no { font-size: 0.85rem; padding: 0.55rem 1.4rem; }
+    .buttons-area { gap: 0.8rem; }
+  }
+
+  @media (max-height: 650px) {
+    .flores-img { width: clamp(120px, 30vw, 160px); }
+    .corazon-img { width: clamp(130px, 32vw, 180px); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== FLOATING HEARTS ===== -->
+<div class="hearts-bg" id="heartsBg"></div>
+
+<!-- ===== SCENE 1: ENVELOPE ===== -->
+<div class="envelope-scene" id="envelopeScene" onclick="openEnvelope()">
+  <div class="envelope-wrapper">
+    <div class="envelope-container" id="envelopeBox">
+      <div class="envelope">
+        <div class="envelope-flap"></div>
+        <div class="envelope-body">
+          <div class="envelope-shadow-left"></div>
+          <div class="envelope-shadow-right"></div>
+        </div>
+        <div class="letter-peek"></div>
+      </div>
+    </div>
+    <div class="envelope-text">Tienes algo especial... ♥️</div>
+    <div class="envelope-from">De alguien que te ama mucho</div>
+    <div class="tap-hint">toca para abrir ✨</div>
+  </div>
+</div>
+
+<!-- ===== SCENE 2: REVEAL IMAGE ===== -->
+<div class="reveal-scene" id="revealScene">
+  <img src="docs/Dudu%20con%20flores.png" alt="Dudu con flores" class="flores-img" id="floresImg">
+  <p class="reveal-msg">Te traje estas flores... ♥️</p>
+  <p class="reveal-continue" onclick="showQuestion()">toca para continuar ✨</p>
+</div>
+
+<!-- ===== SCENE 3: THE QUESTION ===== -->
+<div class="question-scene" id="questionScene">
+  <h1 class="title">¿Quieres ser mi<br>San Valentín? ♥️</h1>
+  <p class="subtitle">( hay una respuesta correcta... solo digo 👀 )</p>
+
+  <div class="buttons-wrapper">
+    <div class="buttons-area" id="buttonsArea">
+      <button class="btn-si" id="btnSi" onclick="sayYes()">
+        ¡Sí, quiero! ♥️
+      </button>
+      <button class="btn-no" id="btnNo">
+        No 😅
+      </button>
+    </div>
+    <div class="attempt-msg" id="attemptMsg"></div>
+  </div>
+</div>
+
+<!-- ===== SCENE 4: CELEBRATION ===== -->
+<div class="celebration" id="celebration">
+  <div class="celebration-text">¡¡Sabía que dirías que sí!! ♥️</div>
+  <img src="docs/Bubu%20y%20Dudud%20Corazon.png" alt="Bubu y Dudu con corazon" class="corazon-img">
+  <div class="celebration-sub">¡Feliz San Valentín, mi mamorecite! ♥️</div>
+  <div class="celebration-footer">Gracias por permitirme acompañarte<br>otro 14 de febrero<br>Te amo ♥️</div>
+</div>
+
+<script>
+// ========== FLOATING HEARTS ==========
+const heartsBg = document.getElementById('heartsBg');
+
+function startFloatingHearts() {
+  const items = ['♥️', '💕', '💗', '💖', '✨', '🌸', '💫'];
+  function spawn() {
+    const el = document.createElement('span');
+    el.className = 'float-heart';
+    el.textContent = items[Math.floor(Math.random() * items.length)];
+    el.style.left = Math.random() * 100 + '%';
+    el.style.animationDuration = (9 + Math.random() * 13) + 's';
+    el.style.fontSize = (0.7 + Math.random() * 1.2) + 'rem';
+    heartsBg.appendChild(el);
+    setTimeout(() => el.remove(), 22000);
+  }
+  // Initial batch
+  for (let i = 0; i < 12; i++) setTimeout(spawn, i * 200);
+  // Ongoing
+  setInterval(spawn, 800);
+}
+
+startFloatingHearts();
+
+// ========== SCENE 1: ENVELOPE ==========
+let envelopeOpened = false;
+
+function openEnvelope() {
+  if (envelopeOpened) return;
+  envelopeOpened = true;
+
+  const box = document.getElementById('envelopeBox');
+  box.classList.add('opened');
+
+  setTimeout(() => {
+    document.getElementById('envelopeScene').classList.add('hidden');
+    document.getElementById('revealScene').classList.add('active');
+  }, 800);
+}
+
+// ========== SCENE 2 -> 3: TRANSITION ==========
+function showQuestion() {
+  document.getElementById('revealScene').style.opacity = '0';
+  document.getElementById('revealScene').style.visibility = 'hidden';
+  document.getElementById('questionScene').classList.add('active');
+}
+
+// ========== NO BUTTON ESCAPE ==========
+const btnNo = document.getElementById('btnNo');
+const btnSi = document.getElementById('btnSi');
+const attemptMsg = document.getElementById('attemptMsg');
+let noAttempts = 0;
+
+const noTexts = [
+  'No 😅',
+  '¿Segura? 🥺',
+  '¿Cómo que no? 😤',
+  'Piénsalo bien... 😢',
+  '¡No me hagas esto! 😭',
+  '¡¡NOOOO!! 💔',
+  '*huye despavorido* 🏃💨',
+  '¡Inalcanzable! 🫣',
+  '♥️💨💨',
+  '...',
+];
+
+const attemptTexts = [
+  '',
+  '¡Dale al botón correcto! 😏',
+  '¿Cómo que no? ¡Imposible! 🤭',
+  'Ya ríndete, el "No" no se deja 😂',
+  '¿Todavía intentando? 🤣',
+  'El "Sí" te está esperando 👉👈',
+  'Admítelo, quieres darle al Sí 💕',
+  '¡El No ya se fue de vacaciones! ✈️',
+  'Solo hay una opción... 🥰',
+  'Dale al Sí ya ♥️',
+];
+
+function getSafePosition() {
+  const btnRect = btnNo.getBoundingClientRect();
+  const siRect = btnSi.getBoundingClientRect();
+  const marginX = window.innerWidth * 0.1;
+  const marginY = window.innerHeight * 0.1;
+  const minX = marginX;
+  const maxX = window.innerWidth - btnRect.width - marginX;
+  const minY = marginY;
+  const maxY = window.innerHeight - btnRect.height - marginY;
+
+  let x, y, tries = 0;
+  do {
+    x = minX + Math.random() * (maxX - minX);
+    y = minY + Math.random() * (maxY - minY);
+    tries++;
+    const dx = Math.abs(x - siRect.left);
+    const dy = Math.abs(y - siRect.top);
+    if (dx > siRect.width + 30 || dy > siRect.height + 30) break;
+  } while (tries < 80);
+
+  return { x, y };
+}
+
+function escapeNo() {
+  noAttempts++;
+
+  if (!btnNo.classList.contains('escaped')) {
+    btnNo.classList.add('escaped');
+  }
+
+  const pos = getSafePosition();
+  btnNo.style.left = pos.x + 'px';
+  btnNo.style.top = pos.y + 'px';
+
+  const ti = Math.min(noAttempts, noTexts.length - 1);
+  btnNo.textContent = noTexts[ti];
+
+  const mi = Math.min(noAttempts, attemptTexts.length - 1);
+  attemptMsg.textContent = attemptTexts[mi];
+
+  // Grow Sí button progressively
+  const grow = Math.min(noAttempts * 0.1, 1);
+  btnSi.style.fontSize = (1.5 + grow) + 'rem';
+  btnSi.style.padding = `${0.95 + noAttempts * 0.05}rem ${3 + noAttempts * 0.2}rem`;
+  btnSi.style.transition = 'font-size 0.4s ease, padding 0.4s ease';
+
+  if (noAttempts >= 5) btnNo.classList.add('panicking');
+
+  if (noAttempts >= 8) {
+    btnNo.style.opacity = Math.max(0.4, 1 - (noAttempts - 7) * 0.12);
+    btnNo.style.transform = `rotate(${(Math.random() - 0.5) * 20}deg)`;
+  }
+}
+
+// Desktop
+btnNo.addEventListener('mouseenter', escapeNo);
+
+// Mobile
+btnNo.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  escapeNo();
+}, { passive: false });
+
+// ========== SÍ BUTTON ==========
+function sayYes() {
+  const rect = btnSi.getBoundingClientRect();
+  burstHearts(rect.left + rect.width / 2, rect.top + rect.height / 2, 18);
+
+  // Hide escaped No button
+  btnNo.style.display = 'none';
+
+  setTimeout(() => {
+    document.getElementById('questionScene').style.opacity = '0';
+    document.getElementById('questionScene').style.visibility = 'hidden';
+    document.getElementById('celebration').classList.add('active');
+    launchConfetti();
+
+    let bursts = 0;
+    const iv = setInterval(() => {
+      burstHearts(
+        Math.random() * window.innerWidth,
+        Math.random() * window.innerHeight,
+        5
+      );
+      bursts++;
+      if (bursts > 20) clearInterval(iv);
+    }, 400);
+  }, 400);
+}
+
+function burstHearts(x, y, count) {
+  const emojis = ['♥️', '💖', '💕', '💗', '✨', '🌸', '💘'];
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('span');
+    el.className = 'burst-heart';
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.style.fontSize = (0.9 + Math.random() * 1.4) + 'rem';
+
+    const angle = (Math.PI * 2 * i) / count + (Math.random() * 0.4);
+    const dist = 50 + Math.random() * 130;
+    const tx = Math.cos(angle) * dist;
+    const ty = Math.sin(angle) * dist;
+
+    el.animate([
+      { transform: 'scale(0) translate(0, 0)', opacity: 1 },
+      { transform: `scale(1.2) translate(${tx}px, ${ty}px)`, opacity: 0 }
+    ], { duration: 1000, easing: 'ease-out', fill: 'forwards' });
+
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1050);
+  }
+}
+
+function launchConfetti() {
+  const colors = ['#e8456b', '#f06292', '#f48fb1', '#ff8a9e', '#ffd6e0', '#c73a5a', '#ffb7c5', '#ff6090', '#fce4ec'];
+  for (let i = 0; i < 120; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      const size = 5 + Math.random() * 9;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      p.style.animationDuration = (2 + Math.random() * 3) + 's';
+      p.style.animationDelay = (Math.random() * 0.5) + 's';
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 6000);
+    }, i * 20);
+  }
+}
+</script>
+</body>
+</html>
