@@ -415,8 +415,8 @@
 
   .btn-no.escaped {
     position: fixed;
-    transition: left 0.55s cubic-bezier(0.25, 1, 0.5, 1),
-                top 0.55s cubic-bezier(0.25, 1, 0.5, 1),
+    transition: left 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+                top 0.8s cubic-bezier(0.25, 1, 0.5, 1),
                 font-size 0.4s ease,
                 padding 0.4s ease,
                 opacity 0.4s ease;
@@ -680,22 +680,35 @@ const attemptTexts = [
 function getSafePosition() {
   const btnRect = btnNo.getBoundingClientRect();
   const siRect = btnSi.getBoundingClientRect();
-  const marginX = window.innerWidth * 0.1;
-  const marginY = window.innerHeight * 0.1;
+
+  // Keep well inside the visible area (20% margin from edges)
+  const marginX = window.innerWidth * 0.2;
+  const marginY = window.innerHeight * 0.2;
   const minX = marginX;
   const maxX = window.innerWidth - btnRect.width - marginX;
   const minY = marginY;
   const maxY = window.innerHeight - btnRect.height - marginY;
 
-  let x, y, tries = 0;
-  do {
-    x = minX + Math.random() * (maxX - minX);
-    y = minY + Math.random() * (maxY - minY);
-    tries++;
-    const dx = Math.abs(x - siRect.left);
-    const dy = Math.abs(y - siRect.top);
-    if (dx > siRect.width + 30 || dy > siRect.height + 30) break;
-  } while (tries < 80);
+  // Move a short random distance from current position (50-90px)
+  const currentX = btnRect.left;
+  const currentY = btnRect.top;
+  const angle = Math.random() * Math.PI * 2;
+  const dist = 50 + Math.random() * 40;
+
+  let x = currentX + Math.cos(angle) * dist;
+  let y = currentY + Math.sin(angle) * dist;
+
+  // Clamp to safe zone
+  x = Math.max(minX, Math.min(maxX, x));
+  y = Math.max(minY, Math.min(maxY, y));
+
+  // If too close to Sí button, nudge away
+  const dx = Math.abs(x - siRect.left);
+  const dy = Math.abs(y - siRect.top);
+  if (dx < siRect.width + 40 && dy < siRect.height + 40) {
+    x = x < siRect.left ? x - 120 : x + 120;
+    x = Math.max(minX, Math.min(maxX, x));
+  }
 
   return { x, y };
 }
